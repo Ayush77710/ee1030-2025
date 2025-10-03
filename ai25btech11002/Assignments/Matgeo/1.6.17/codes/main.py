@@ -17,7 +17,7 @@ B = np.array([1,-1,3]).reshape(-1,1)
 C = np.array([3,5,3]).reshape(-1,1)
 
 #rank of matrix
-R=np.matrix_rank(np.hstack(A,B,C))
+R=LA.matrix_rank(np.hstack((A,B,C)))
 
 fig = plt.figure(figsize=(8, 6))
 ax = fig.add_subplot(111, projection='3d')
