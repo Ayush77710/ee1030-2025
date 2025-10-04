@@ -13,55 +13,58 @@ from line.funcs import *
 #import shlex
 #end if
 # Load the shared library
-lib = ctypes.CDLL("./librank.so")
+lib = ctypes.CDLL("./determinant.so")
 
 # Tell ctypes about the function signature
-lib.rank.argtypes = [ctypes.c_int, ctypes.c_int,
-                     np.ctypeslib.ndpointer(dtype=np.float32,
+lib.determinant.argtypes = [ctypes.c_int,
+                     np.ctypeslib.ndpointer(dtype=np.double,
                                             ndim=2,
                                             flags="C_CONTIGUOUS")]
-lib.rank.restype = ctypes.c_int
+lib.determinant.restype = ctypes.c_double
 
-def c_matrix_rank(mat: np.ndarray) -> int:
-    mat = np.array(mat, dtype=np.float32, order='C')  # ensure C-contiguous float32
-    m, n = mat.shape
-    return lib.rank(m, n, mat)
-A = np.array([-2,-10,3]).reshape(-1,1)
-B = np.array([1,-1,3]).reshape(-1,1)
-C = np.array([3,5,3]).reshape(-1,1)
+def c_matrix_det(mat: np.ndarray) -> float:
+    mat = np.array(mat, dtype=np.double, order='C')  # ensure C-contiguous float32
+    n, m = mat.shape
+    return lib.determinant(n, mat)
+A = np.array([-3,7,5]).reshape(-1,1)
+B = np.array([-5,7,-3]).reshape(-1,1)
+C = np.array([7,-5,-3]).reshape(-1,1)
+O = np.array([0,0,0]).reshape(-1,1)
 
-#rank of matrix
-R=c_matrix_rank(np.hstack((A,B,C)))
+#det of matrix
+R=c_matrix_det(np.hstack((A,B,C)))
 
 fig = plt.figure(figsize=(8, 6))
 ax = fig.add_subplot(111, projection='3d')
 
 # Flatten vectors before plotting
-A, B, C = A.flatten(), B.flatten(), C.flatten()
+O, A, B, C = O.flatten(), A.flatten(), B.flatten(), C.flatten()
 
 #Generating all lines
-x_AB = line_gen(A,B)
-x_BC = line_gen(B,C)
+x_OA = line_gen(O,A)
+x_OB = line_gen(O,B)
+x_OC = line_gen(O,C)
 
 #Plotting all lines
-ax.plot(x_AB[0,:],x_AB[1,:], x_AB[2,:],color='pink',label='$AB$')
-ax.plot(x_BC[0,:],x_BC[1,:], x_BC[2,:],color='y',label='$BC$')
+ax.plot(x_OA[0,:],x_OA[1,:], x_OA[2,:],color='pink',label='$OA$')
+ax.plot(x_OB[0,:],x_OB[1,:], x_OB[2,:],color='y',label='$OB$')
+ax.plot(x_OC[0,:],x_OC[1,:], x_OC[2,:],color='purple',label='$OC$')
 
 # Scatter plot
-ax.scatter(*A, color='r', s=100, label='A(-2, -10, 3)')
-ax.scatter(*B, color='g', s=100, label='B(1, -1, 3)')
-ax.scatter(*C, color='b', s=100, label='C(3, 5, 3)')
+ax.scatter(*A, color='r', s=100, label='A(-3, 7, 5)')
+ax.scatter(*B, color='g', s=100, label='B(-5, 7, -3)')
+ax.scatter(*C, color='b', s=100, label='C(7, -5, -3)')
 
 #Annotating points
 ax.text(*A, ' A', color='r', fontsize=10)
 ax.text(*B, ' B', color='g', fontsize=10)
-ax.text(*C, ' C', color='b', fontsize=10)\
+ax.text(*C, ' C', color='b', fontsize=10)
 
 #Setting axes' labels
 ax.set_xlabel('X-axis')
 ax.set_ylabel('Y-axis')
 ax.set_zlabel('Z-axis')
-ax.set_title('Points A, B, C and the line passing through')
+ax.set_title('Edges of a cuboid')
 ax.legend()
 ax.grid(True)
 

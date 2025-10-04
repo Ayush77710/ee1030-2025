@@ -67,60 +67,37 @@ columns=fullflexible
 
 \numberwithin{equation}{section}
 
-
 \begin{document}
 
-\title{2.9.18}
+
+\title{3.2.13}
 \author{AI25BTECH11002 - Ayush Sunil Labhade}
 {\let\newpage\relax\maketitle}
-%\renewcommand{\thefigure}{\theenumi}
-%\renewcommand{\thetable}{\theenumi}
-		\textbf{Question}:\newline
 
-		Find the volume of a cuboid whose edges are given by  $-3\hat{\imath}+7\hat{\jmath}+5\hat{k}$,  $-5\hat{\imath}+7\hat{\jmath}-3\hat{k}$ and  $7\hat{\imath}-5\hat{\jmath}-3\hat{k}$.
-		\newline
-		\textbf{Solution:}
-		Given:
-		\begin{table}[H]
-			\centering
-			\input{../Tables/2.9.18.1}
-			\label{}
-			\caption{Given data}
-		\end{table}
-		To find volume we need to compute \sbrak{a \ b \ c}
-		We will compute it using Gram Matrix($\vec{G}$):
-		\begin{align}
-		\vec{G}=\myvec{a \\ b \\ c}\myvec{a & b & c}
-		\end{align}
-			The Gram matrix is
-		\begin{align}
-			\vec{G} =
-		\myvec{
-\vec{a}^T \vec{a} & \vec{a}^T \vec{b} & \vec{a}^T \vec{c} \\
-\vec{b}^T \vec{a} & \vec{b}^T \vec{b} & \vec{b}^T \vec{c} \\
-\vec{c}^T \vec{a} & \vec{c}^T \vec{b} & \vec{c}^T \vec{c}
-}
-		\end{align}
-		\begin{align}
-			\vec{G} = \myvec{83 & 49 & -71 \\49 & 83 & -61 \\-71 & -61 & 83}
-		\end{align}
-		On computing,
-		\begin{align}
-			det(\vec{G})=69696
-		\end{align}
-		The volume will be the squareroot of the det($\vec{G}$)
-		\begin{align}
-			volume=\sbrak{a \ b \ c}=\sqrt{69696}=264
-		\end{align}
-		\begin{align}
-			\therefore \sbrak{a \ b \ c}=264
-		\end{align}
-		\newpage
-		Graph:
+\textbf{Question}:\newline
+
+Draw a triangle ABC in which AB=5cm, BC=6cm and $\angle ABC=60^\circ$.
+\newline
+\textbf{Solution:}\newline
+The triangle can be plotted by taking $B = (0,0)$ and $A = (5,0)$.
+Therefore, $C$ will be:
+\[
+C = (6\cos 60^\circ,\;6\sin 60^\circ)
+\]
+
+Thus, the points are:
+\begin{table}[H]
+    \centering
+    \input{../Tables/3.2.13.1}
+    \caption{Points data}
+    \label{tab:points}
+\end{table}
+
+Graph:
 \begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.5]{plot}
-	\caption*{}
-	\label{fig}
+    \centering
+    \includegraphics[scale=0.5]{plot}
+    \caption{}
+    \label{fig:plot}
 \end{figure}
 \end{document}

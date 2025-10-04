@@ -1,50 +1,58 @@
-import ctypes
+import math
+#import sys   
 import numpy as np
+import numpy.linalg as LA
 import matplotlib.pyplot as plt
+import matplotlib.image as mpim
 from mpl_toolkits.mplot3d import Axes3D
-from line.funcs import line_gen 
+from line.funcs import *
+import ctypes
 
-lib = ctypes.CDLL("./libmag.so")
-lib.mag.argtypes = [ctypes.c_int, ctypes.c_double,
-                    np.ctypeslib.ndpointer(dtype=np.double, ndim=1, flags="C_CONTIGUOUS"),
-                    np.ctypeslib.ndpointer(dtype=np.double, ndim=1, flags="C_CONTIGUOUS")]
-lib.mag.restype = ctypes.c_double
+lib = ctypes.CDLL("./determinant.so")  # make sure the .so file is in the same folder
 
-A = np.array([-2, -1, 2], dtype=np.double)
+lib.determinant.argtypes = [ctypes.c_int, np.ctypeslib.ndpointer(dtype=np.double, ndim=2, flags="C_CONTIGUOUS")]
+lib.determinant.restype = ctypes.c_double
 
-# Desired magnitude for B
-M = 9.0
-B = np.zeros_like(A)
-
-lib.mag(A.size, M, A, B)
-
-# Origin
-O = np.array([0, 0, 0], dtype=np.double)
-
-# Plotting
+A = np.array([-3,7,5]).reshape(-1,1)
+B = np.array([-5,7,-3]).reshape(-1,1)
+C = np.array([7,-5,-3]).reshape(-1,1)
+O = np.array([0,0,0]).reshape(-1,1)
+M = np.block([A, B, C])
+D = lib.determinant(M.shape[0], M)
 fig = plt.figure(figsize=(8, 6))
 ax = fig.add_subplot(111, projection='3d')
 
-x_OA = line_gen(O, A)
-x_OB = line_gen(O, B)
+# Flatten vectors before plotting
+O, A, B, C = O.flatten(), A.flatten(), B.flatten(), C.flatten()
 
-ax.plot(x_OA[0,:], x_OA[1,:], x_OA[2,:], color='pink', label='OA')
-ax.plot(x_OB[0,:], x_OB[1,:], x_OB[2,:], color='y', label='OB')
+#Generating all lines
+x_OA = line_gen(O,A)
+x_OB = line_gen(O,B)
+x_OC = line_gen(O,C)
 
-ax.scatter(*A, color='r', s=100, label=f'A {tuple(A)}')
-ax.scatter(*B, color='g', s=100, label=f'B (|B|={M})')
-ax.scatter(*O, color='b', s=100, label='O')
+#Plotting all lines
+ax.plot(x_OA[0,:],x_OA[1,:], x_OA[2,:],color='pink',label='$OA$')
+ax.plot(x_OB[0,:],x_OB[1,:], x_OB[2,:],color='y',label='$OB$')
+ax.plot(x_OC[0,:],x_OC[1,:], x_OC[2,:],color='purple',label='$OC$')
 
-ax.text(*A, ' A', color='r')
-ax.text(*B, ' B', color='g')
-ax.text(*O, ' O', color='b')
+# Scatter plot
+ax.scatter(*A, color='r', s=100, label='A(-3, 7, 5)')
+ax.scatter(*B, color='g', s=100, label='B(-5, 7, -3)')
+ax.scatter(*C, color='b', s=100, label='C(7, -5, -3)')
 
+#Annotating points
+ax.text(*A, ' A', color='r', fontsize=10)
+ax.text(*B, ' B', color='g', fontsize=10)
+ax.text(*C, ' C', color='b', fontsize=10)
+
+#Setting axes' labels
 ax.set_xlabel('X-axis')
 ax.set_ylabel('Y-axis')
 ax.set_zlabel('Z-axis')
-ax.set_title(f"A vector B of magnitude {M} in direction of A")
+ax.set_title('Edges of a parallelopiped')
 ax.legend()
 ax.grid(True)
 
+# Save to figs folder
 plt.savefig("../Figs/plot.png")
 plt.show()
