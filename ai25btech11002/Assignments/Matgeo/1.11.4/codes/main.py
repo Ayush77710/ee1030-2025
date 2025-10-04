@@ -31,9 +31,9 @@ ax.plot(x_OA[0,:],x_OA[1,:], x_OA[2,:],color='pink',label='$OA$')
 ax.plot(x_OB[0,:],x_OB[1,:], x_OB[2,:],color='y',label='$OB$')
 
 # Scatter plot
-ax.scatter(*A, color='r', s=100, label='A(-2, -10, 3)')
-ax.scatter(*B, color='g', s=100, label='B(1, -1, 3)')
-ax.scatter(*O, color='b', s=100, label='O(3, 5, 3)')
+ax.scatter(*A, color='r', s=100, label='A(-2, -1, 2)')
+ax.scatter(*B, color='g', s=100, label='B(6, -3, 6)')
+ax.scatter(*O, color='b', s=100, label='O(0, 0, 0)')
 
 #Annotating points
 ax.text(*A, ' A', color='r', fontsize=10)
