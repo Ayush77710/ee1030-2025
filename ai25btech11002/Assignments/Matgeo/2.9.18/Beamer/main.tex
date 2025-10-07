@@ -75,7 +75,8 @@ columns=fullflexible
 {\let\newpage\relax\maketitle}
 %\renewcommand{\thefigure}{\theenumi}
 %\renewcommand{\thetable}{\theenumi}
-		\textbf{Question}:\newline
+	
+\textbf{Question}:\newline
 
 		Find the volume of a cuboid whose edges are given by  $-3\hat{\imath}+7\hat{\jmath}+5\hat{k}$,  $-5\hat{\imath}+7\hat{\jmath}-3\hat{k}$ and  $7\hat{\imath}-5\hat{\jmath}-3\hat{k}$.
 		\newline
@@ -88,33 +89,26 @@ columns=fullflexible
 			\caption{Given data}
 		\end{table}
 		To find volume we need to compute \sbrak{a \ b \ c}
-		We will compute it using Gram Matrix($\vec{G}$):
+		We will compute by finding the determinant of \sbrak{a \ b \ c}:
 		\begin{align}
-		\vec{G}=\myvec{a \\ b \\ c}\myvec{a & b & c}
+			\vec{D}=\myvec{a & b & c}
 		\end{align}
-			The Gram matrix is
 		\begin{align}
-			\vec{G} =
+			\vec{D} =
 		\myvec{
-\vec{a}^T \vec{a} & \vec{a}^T \vec{b} & \vec{a}^T \vec{c} \\
-\vec{b}^T \vec{a} & \vec{b}^T \vec{b} & \vec{b}^T \vec{c} \\
-\vec{c}^T \vec{a} & \vec{c}^T \vec{b} & \vec{c}^T \vec{c}
+3 & -5 & -7 \\
+7 & 7 & -5 \\
+5 & -3 & -3
 }
-		\end{align}
-		\begin{align}
-			\vec{G} = \myvec{83 & 49 & -71 \\49 & 83 & -61 \\-71 & -61 & 83}
 		\end{align}
 		On computing,
 		\begin{align}
-			det(\vec{G})=69696
-		\end{align}
-		The volume will be the squareroot of the det($\vec{G}$)
-		\begin{align}
-			volume=\sbrak{a \ b \ c}=\sqrt{69696}=264
+			det(\vec{D})=264
 		\end{align}
 		\begin{align}
 			\therefore \sbrak{a \ b \ c}=264
 		\end{align}
+		Thus, the volume is 264.
 		\newpage
 		Graph:
 \begin{figure}[H]
