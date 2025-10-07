@@ -1,115 +1,72 @@
-
+import math
+#import sys   
 import numpy as np
 import numpy.linalg as LA
-import scipy.linalg as SA
 import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-
-#local imports
+import matplotlib.image as mpim
+from mpl_toolkits.mplot3d import Axes3D
 from line.funcs import *
-from triangle.funcs import *
-from conics.funcs import circ_gen
+#from triangle.funcs import *
+#from conics.funcs import circ_gen
+#if using termux
+#import subprocess
+#import shlex
+#end if
 import ctypes
 
-# Load shared library
-lib = ctypes.CDLL("./libcoords.so")
+# Load the shared library
+rank_lib = ctypes.CDLL('./rank.so')
+rank_lib.rank_matrix.argtypes = [ctypes.c_int, ctypes.c_int, np.ctypeslib.ndpointer(dtype=ctypes.c_double, flags="C_CONTIGUOUS")]
+rank_lib.rank_matrix.restype = ctypes.c_int
 
-# Define argument and return types
-lib.polar_to_cartesian.argtypes = [ctypes.c_double, ctypes.c_double,
-                                   ctypes.POINTER(ctypes.c_double),
-                                   ctypes.POINTER(ctypes.c_double)]
-lib.polar_to_cartesian.restype = None
+# Define points and direction vectors
+A = np.array([-3, 1, 5])  # Point on Line 1
+B = np.array([-1, 2, 5])  # Point on Line 2
+m1 = np.array([-3, 1, 5])  # Direction vector of Line 1
+m2 = np.array([-1, 2, 5])  # Direction vector of Line 2
 
-# Example: C coordinates
-x = ctypes.c_double()
-y = ctypes.c_double()
-lib.polar_to_cartesian(6.0, 60.0, ctypes.byref(x), ctypes.byref(y))
+# Compute B - A
+B_minus_A = B - A
 
-'''
-#Input parameters from excel file
-df= pd.read_excel('tables/vertices.xlsx')
-#print(df)
-dst = df.to_numpy()[:,:]
-print(dst)
+# Construct matrix [m1, m2, B - A]
+matrix = np.column_stack((m1, m2, B_minus_A))
 
-A  = dst[:,0].reshape(-1,1)
-B  = dst[:,1].reshape(-1,1) 
-C  = dst[:,2].reshape(-1,1)
+# Convert to C-compatible 2D array
+m, n = matrix.shape
+c_matrix = np.ascontiguousarray(matrix, dtype=ctypes.c_double)
 
-#print(A,B,C)
-'''
-#Triangle vertices
-A = np.array([5,0]).reshape(-1,1)
-B = np.array([0,0]).reshape(-1,1) 
-C = np.array([x.value,y.value]).reshape(-1,1) 
+# Call C function to get rank
+rank = rank_lib.rank_matrix(m, n, c_matrix)
+x1 = np.arange(-50,50,0.1)
+y1 = -x1/3
+z1 = 5*y1
 
-#Triangle sides
-c = LA.norm(A-B)
-a = LA.norm(B-C)
-b = LA.norm(C-A)
-print(a,b,c)
+x2 = np.arange(-50,50,0.1)
+y2 = -2*x2
+z2 = -5*x2
 
-#Direction Vectors
-m1 = dir_vec(A,B)
-m2 = dir_vec(B,C)
-m3 = dir_vec(C,A)
-#print(m1,m2,m3)
+fig = plt.figure(figsize=(8, 6))
+ax = fig.add_subplot(111, projection='3d')
 
-#Line parameters
-n1 = norm_vec(A,B)
-c1 = n1.T@A
-n2 = norm_vec(B,C)
-c2 = n2.T@B
-n3 = norm_vec(C,A)
-c3 = n3.T@C
-#print(n1,c1,n2,c2,n3,c3)
-
-#Area
-arvec = np.cross(m1[:,0],m3[:,0])
-area = 1/2*LA.norm(arvec)
-#print(area)
-
-#Angles
-angA = np.degrees(np.arccos((-m1.T@m3)/(c*b)))
-angB = np.degrees(np.arccos((-m1.T@m2)/(c*a)))
-angC = np.degrees(np.arccos((-m2.T@m3)/(a*b)))
-#print(angA,angB,angC)
-
-#Writing sides to excel
-sides=np.array([a,b,c]).reshape(-1,1)
-columns=['a','b','c']
-
-#Generating all lines
-x_AB = line_gen(A,B)
-x_BC = line_gen(B,C)
-x_CA = line_gen(C,A)
-
-
+#Generating the plane
+x=np.arange(-50,50,0.1)
+y=np.arange(-50,50,0.1)
+X,Y = np.meshgrid(x,y)
+Z=2*Y-X
+ax.plot_surface(X, Y, Z, alpha=0.5, color='cyan')
 
 #Plotting all lines
-plt.plot(x_AB[0,:],x_AB[1,:],label='$AB$')
-plt.plot(x_BC[0,:],x_BC[1,:],label='$BC$')
-plt.plot(x_CA[0,:],x_CA[1,:],label='$CA$')
+ax.plot(x1,y1, z1,color='pink',label='$Line 1$')
+ax.plot(x2,y2, z2,color='y',label='$Line 2$')
 
-#Labeling the coordinates
-tri_coords = np.block([[A,B,C]])
-plt.scatter(tri_coords[0,:], tri_coords[1,:])
-vert_labels = ['A','B','C']
-for i, txt in enumerate(vert_labels):
-    plt.annotate(txt, # this is the text
-                 (tri_coords[0,i], tri_coords[1,i]), # this is the point to label
-                 textcoords="offset points", # how to position the text
-                 xytext=(0,10), # distance from text to points (x,y)
-                 ha='center') # horizontal alignment can be left, right or center
-plt.xlabel('$x$')
-plt.ylabel('$y$')
-plt.legend(loc='best')
-plt.grid() # minor
-plt.axis('equal')
+#Setting axes' labels
+ax.set_xlabel('X-axis')
+ax.set_ylabel('Y-axis')
+ax.set_zlabel('Z-axis')
+ax.set_title('Points A, B, C and the line passing through')
+ax.legend()
+ax.grid(True)
 
-#if using termux
-plt.savefig('../Figs/plot.png')
+# Save to figs folder
+plt.savefig("../Figs/plot.png")
 plt.show()
-#else
-#plt.show()
-
