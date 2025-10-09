@@ -23,6 +23,12 @@ int rank(int m,int n,float a[m][n]) {
                 a[l+1][j]-=a[i][j]*k;
             }
         }
+    } printf("Row Reduced Matrix:\n");
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            printf("%8.3f ", a[i][j]);
+        }
+        printf("\n");
     }
     int t=0;
     for(int i=0;i<m && i<n;i++){

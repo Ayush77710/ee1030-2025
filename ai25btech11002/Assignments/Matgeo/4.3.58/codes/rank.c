@@ -29,6 +29,13 @@ int rank(int m,int n,float a[m][n]) {
       if(a[i][i]==0)
         t++;
     }
+printf("Row Reduced Matrix:\\n");
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            printf("%8.3f ", a[i][j]);
+        }
+        printf("\\n");
+    }
     if(m<n)
       return m-t;
     else
