@@ -51,68 +51,57 @@
 %\renewcommand{\thefigure}{\theenumi}
 %\renewcommand{\thetable}{\theenumi}
 
-\textbf{Question :} Sketch the region \brak{x, 0} : y = $\sqrt{4 - x^2}$ and x-axis. Find the area of the region using integration.
+\textbf{Question :} A circle S passes through the point (0, 1) and is orthogonal to the circle $\brak{x-1}^2 + y^2 =16$ and $x^2 + y^2 =1$.
 
 \textbf{Solution :}
 
-\begin{table}[h!]
-  \centering
-  \begin{tabular}{|l|l|}
-  \hline
-  Name & Value \\
-  \hline
-  Circle & $\vec{x}^\top\vec{x} - 4 = 0$ \\
-  Line & $\vec{x} = \myvec{0\\0} + \kappa \myvec{1\\0}$ \\
-  \hline
-  \end{tabular}
-  \caption*{Table : Circle}
-  \label{9.2.35}
-\end{table}
-
-The parameters for the circle are :
+The general equation of the circle is 
 
 \begin{align}
-  \vec{V} &= \vec{I} & \vec{u} &= \vec{0} & f &= -4 
+  x^2 + y^2 + d x + e y + f = 0
 \end{align}
 
-The parameters for the line are :
+The condition for passing through \brak{0,1} is
 
 \begin{align}
-  \vec{h} &= \myvec{0\\0} & \vec{m} &= \myvec{1\\0}
+  e + f = -1
 \end{align}
 
-Substituting these in the below equation to find the intersection points :
+The orthogonality condition is $d_1$ d + $e_1$ e = 2 $\brak{f + f_1}$
+
+For the first circle, $d_1$ = -2, $e_1$ = 0, $f_1$ = -15, yielding
 
 \begin{align}
-\kappa_i
-	&= \frac{1}{\vec{m}^\top \vec{V}\vec{m}} \brak{
-       -\,\vec{m}^\top\big(\vec{V}\vec{h}+\vec{u}\big)
-       \;\pm\;
-       \sqrt{ \big[\vec{m}^\top(\vec{V}\vec{h}+\vec{u})\big]^2
-	- g(\vec{h})\,\big(\vec{m}^\top \vec{V}\vec{m}\big)}}\\
-    g(\vec{x}) &= \vec{x}^\top\vec{x} - 4 \\
-    g(\vec{h}) &= \vec{h}^\top\vec{h} - 4 \\
-\kappa_i &= 
-       -\,\vec{m}^\top\vec{h}
-       \;\pm\;
-       \sqrt{4 -\vec{h}^\top\vec{h}} \\
-  \kappa_i &= 2,-2
+  -2 d = 2 \brak{f -15}
 \end{align}
 
-Therefore the points of intersection are :
+For the second circle, $d_1$ = 0, $e_1$ = 0, $f_1$ = -1, yielding
 
 \begin{align}
-  \vec{P_1} &= \myvec{2\\0} & \vec{P_2} &= \myvec{-2\\0}
+  0 = 2 \brak{f -1}
 \end{align}
 
-Thus the area of the region is :
+The system of equations is
 
 \begin{align}
-  2 \int\limits_{0}^{2}\! \sqrt{4 - x^2}\, dx &= 2\pi
+  \augvec{3}{1}{0 & 1 & 1 & -1 \\
+  -2 & 0 & -2 & -30 \\
+  0 & 0 & -2 & -2}
+\end{align}
+Converting in its RREF, we get,
+\begin{align}
+  \augvec{3}{1}{0 & 1 & 1 & -1 \\
+  -2 & 0 & -2 & -30 \\
+  0 & 0 & -2 & -2}
 \end{align}
 
-\pagebreak
+Using RREF or solving, f = 1, d = 14, e = -2.
 
+Thus, the equation is
+
+\begin{align}
+  x^2 + y^2 + 14x - 2y + 1 = 0
+\end{align}
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.7\columnwidth]{plot.png} 
